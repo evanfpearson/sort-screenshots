@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ $# -ne 1 ]
+then
+    echo "usage: $1 <directory>"
+    exit 1
+fi
+
+cd "$1"
+
+dates=$(ls | grep Screenshot | sed -E 's/Screenshot ([0-9]+-[0-9]+-[0-9]+) .*/\1/' | uniq | sed 's|-|/|g')
+
+if [ "$dates" == "" ]; then
+    exit 0
+fi
+
+mkdir -p $dates
+
+for f in Screenshot*; do
+    mv "$f" "$(echo $f | sed -E 's/Screenshot ([0-9]+-[0-9]+-[0-9]+) .*/\1/' | uniq | sed 's|-|/|g')"
+done
